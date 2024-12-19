@@ -640,30 +640,44 @@ section {
     </section>
 
     <!-- Form Upload Pembayaran -->
-    <section id="payment-form" style="display: none;">
-        <div class="form-container">
-            <h2>Upload Bukti Pembayaran</h2>
-            <form action="/customer/processPayment" method="post" enctype="multipart/form-data">
-                <?= csrf_field() ?>
-                <div class="form-group">
-                    <label for="id_pemesanan"><i class="fas fa-receipt"></i> Pilih Pemesanan:</label>
-                    <select id="id_pemesanan" name="id_pemesanan" class="form-control" required>
-                        <option value="" disabled selected>-- Pilih Pemesanan --</option>
-                        <?php foreach ($pemesanan as $pesanan): ?>
+ <section id="payment-form" style="display: none;">
+    <div class="form-container">
+        <h2>Upload Bukti Pembayaran</h2>
+        <form action="/customer/processPayment" method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
+            <div class="form-group">
+                <label for="id_pemesanan"><i class="fas fa-receipt"></i> Pilih Pemesanan:</label>
+                <select id="id_pemesanan" name="id_pemesanan" class="form-control" required>
+                    <option value="" disabled selected>-- Pilih Pemesanan --</option>
+                    <?php foreach ($pemesanan as $pesanan): ?>
                         <option value="<?= $pesanan['id_pemesanan'] ?>">
                             <?= $pesanan['id_pemesanan'] ?> - <?= $pesanan['tim_a'] ?> vs <?= $pesanan['tim_b'] ?>
                         </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="bukti_pembayaran"><i class="fas fa-upload"></i> Unggah Bukti Pembayaran:</label>
-                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran" class="form-control" accept="image/*,application/pdf" required>
-                </div>
-                <button type="submit" class="btn-upload"><i class="fas fa-upload"></i> Upload Bukti Pembayaran</button>
-            </form>
-        </div>
-    </section>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="payment-method"><i class="fas fa-university"></i> Metode Pembayaran:</label>
+                <select id="payment-method" name="payment_method" class="form-control" required>
+                    <option value="" disabled selected>-- Pilih Metode Pembayaran --</option>
+                    <option value="bri">Bank BRI</option>
+                    <option value="bni">Bank BNI</option>
+                    <option value="mandiri">Bank Mandiri</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="account-number"><i class="fas fa-wallet"></i> Nomor Rekening:</label>
+                <input type="text" id="account-number" class="form-control" name="account_number" readonly>
+            </div>
+            <div class="form-group">
+                <label for="bukti_pembayaran"><i class="fas fa-upload"></i> Unggah Bukti Pembayaran:</label>
+                <input type="file" id="bukti_pembayaran" name="bukti_pembayaran" class="form-control"
+                    accept="image/*,application/pdf" required>
+            </div>
+            <button type="submit" class="btn-upload"><i class="fas fa-upload"></i> Upload Bukti Pembayaran</button>
+        </form>
+    </div>
+</section>
  <div id="floating-help">
         <a href="https://wa.me/6281234567890" target="_blank"><i class="fas fa-headset"></i> Bantuan</a>
     </div>
@@ -705,7 +719,7 @@ section {
 
             if (ticketType && quantity) {
                 const totalPrice = ticketPrices[ticketType] * quantity;
-                document.getElementById('total-harga').value = `IDR ${totalPrice.toLocaleString('id-ID')}`;
+                document.getElementById('total-harga').value = IDR ${totalPrice.toLocaleString('id-ID')};
             } else {
                 document.getElementById('total-harga').value = '';
             }
@@ -739,7 +753,24 @@ section {
 });
 
                 </Script>
-                    
+                
+
+                <!-- JavaScript -->
+<script>
+    
+    const accountNumbers = {
+    bri: '002401000123456',   
+    bni: '019001234567890',    
+    mandiri: '1230005678901'  
+};
+
+    // Event listener untuk mengisi nomor rekening otomatis
+    document.getElementById('payment-method').addEventListener('change', function () {
+        const selectedBank = this.value;
+        const accountNumberField = document.getElementById('account-number');
+        accountNumberField.value = accountNumbers[selectedBank] || '';
+    });
+</script>
                  <footer>
     <div class="footer-content">
         <div class="footer-info">
